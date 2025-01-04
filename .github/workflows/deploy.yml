@@ -20,7 +20,7 @@ jobs:
       run: ./gradlew build
 
     - name: Docker image 빌드
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cicd-test
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cicd-test .
 
     - name: Docker Hub 로그인
       uses: docker/login-action@v3
