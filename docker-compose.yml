@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    image: choidasol95/cicd-test:latest # 지정된 Docker Hub 이미지 사용
+    container_name: spring-boot-app
+    ports:
+      - "8080:8080" # 로컬 포트와 컨테이너 포트 매핑
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/test?characterEncoding=UTF-8&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: test
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MariaDB106Dialect
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.6 # MariaDB 이미지
+    container_name: mariadb
+    restart: always
+    ports:
+      - "3306:3306" # MariaDB 포트 매핑
+    environment:
+      MARIADB_ROOT_PASSWORD: root_password # MariaDB 루트 비밀번호
+      MARIADB_DATABASE: test              # 초기화할 데이터베이스 이름
+      MARIADB_USER: test                  # MariaDB 사용자 이름
+      MARIADB_PASSWORD: 1234              # MariaDB 사용자 비밀번호
+    volumes:
+      - db-data:/var/lib/mysql # MariaDB 데이터 영구 저장소 설정
+
+volumes:
+  db-data:

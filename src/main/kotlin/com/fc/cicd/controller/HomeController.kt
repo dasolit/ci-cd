@@ -8,6 +8,11 @@ class HomeController {
 
     @GetMapping("")
     fun home(): String{
-        return "Hello World";
+        var i = 1;
+        if (i == 1) {
+            return "Hello World $i";
+        } else {
+            return "Hello World 2";
+        }
     }
 }
