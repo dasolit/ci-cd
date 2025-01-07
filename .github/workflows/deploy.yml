@@ -66,6 +66,3 @@ jobs:
     - name: Docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cicd-test
 
-  volumes:
-    runs-on:
-      redis_data: {}
