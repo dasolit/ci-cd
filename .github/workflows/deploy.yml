@@ -39,7 +39,7 @@ jobs:
         volumes:
           - redis_data:/data
           - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf  # 경로 수정
-        options: --health-cmd="redis-server --test-memory" --health-timeout=5s --health-start-period=10s --health-retries=5
+        options: --health-cmd="redis-server --test-memory" --health-timeout=5s --health-start-period=10s --health-retries=5 --sysctl net.core.somaxconn=1024 --sysctl vm.overcommit_memory=1
     steps:
     - name: 체크아웃
       uses: actions/checkout@v4
