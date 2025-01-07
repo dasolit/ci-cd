@@ -1,11 +1,12 @@
 version: '3.8'
 
 services:
+
   app:
     image: choidasol95/cicd-test:latest
     container_name: spring-boot-app
     ports:
-      - 8080:8080
+      - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mariadb://db:3306/test?characterEncoding=UTF-8&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: test
@@ -22,32 +23,36 @@ services:
     restart: always
     container_name: postgres
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: test
     volumes:
-      - ./postgres/data/:/var/lib/postgresql/data
+      - postgres_data/:/var/lib/postgresql/data
   mongo:
     image: mongo:latest
     container_name: mongodb
     ports:
-      - 27017:27017
+      - "27017:27017"
     volumes:
-      - ./mongo/data:/data
+      - mongo_data:/data
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_ROOT_USERNAME=test
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=test
 
   redis:
     image: redis:latest
-    container_name: redis_test
+    container_name: redis
     ports:
-      - 6379:6379
+      - "6379:6379"
     volumes:
-      - ./redis/data:/data
+      - redis_data:/data
       - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
     restart: always
     command: redis-server /usr/local/conf/redis.conf
 volumes:
-  db-data:
+  postgres_data:
+  mongo_data:
+  redis_data:
