@@ -10,13 +10,14 @@ jobs:
     services:
       # PostgreSQL Service 설정
       postgres:
-        image: postgres:13
+        image: postgres:latest
         ports:
           - 5432:5432
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: 1234
           POSTGRES_DB: test
+        options: --health-cmd="pg_isready -U test" --health-timeout=5s --health-start-period=10s --health-retries=5
 
       # MongoDB Service 설정
       mongodb:
@@ -27,6 +28,8 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: 1234
           MONGO_INITDB_DATABASE: test
+        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")'" --health-timeout=5s --health-start-period=10s --health-retries=5
+
 
       # Redis Service 설정
       redis:
@@ -35,10 +38,12 @@ jobs:
           - 6379:6379
         volumes:
           - redis_data:/data
-          - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
-
+          - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf  # 경로 수정
+        options: --health-cmd="redis-server --test-memory" --health-timeout=5s --health-start-period=10s --health-retries=5
     steps:
-    - uses: actions/checkout@v4
+    - name: 체크아웃
+      uses: actions/checkout@v4
+
     - name: JDK 21 설정
       uses: actions/setup-java@v4
       with:
@@ -61,4 +66,6 @@ jobs:
     - name: Docker Hub push
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cicd-test
 
-
+  volumes:
+    runs-on:
+      redis_data: {}
