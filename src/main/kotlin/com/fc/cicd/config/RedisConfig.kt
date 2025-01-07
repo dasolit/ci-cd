@@ -1,3 +1,4 @@
+/*
 package com.fc.cicd.config
 
 import org.springframework.beans.factory.annotation.Value
@@ -39,3 +40,4 @@ class RedisConfig {
         }
     }
 }
+*/
