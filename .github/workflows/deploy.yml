@@ -17,7 +17,6 @@ jobs:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: 1234
           POSTGRES_DB: test
-        options: --health-cmd="pg_isready -U test" --health-timeout=5s --health-start-period=10s --health-retries=5
 
       # MongoDB Service 설정
       mongodb:
@@ -28,14 +27,15 @@ jobs:
           MONGO_INITDB_ROOT_USERNAME: test
           MONGO_INITDB_ROOT_PASSWORD: 1234
           MONGO_INITDB_DATABASE: test
-        options: --health-cmd="mongo --eval 'db.adminCommand(\"ping\")'" --health-timeout=5s --health-start-period=10s --health-retries=5
 
       # Redis Service 설정
       redis:
         image: redis:latest
         ports:
           - 6379:6379
-        options: --health-cmd="redis-server --test-memory" --health-timeout=5s --health-start-period=10s --health-retries=5
+        volumes:
+          - redis_data:/data
+          - ./redis/conf/redis.conf:/usr/local/conf/redis.conf
 
     steps:
     - uses: actions/checkout@v4
